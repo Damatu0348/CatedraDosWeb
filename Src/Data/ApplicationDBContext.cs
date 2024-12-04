@@ -13,6 +13,6 @@ namespace apiWebDos.Src.Data
         {
             
         }
-        public DbSet<Usuario> Usuario {get; set;} = null!;
+        public DbSet<Usuario> Usuarios {get; set;} = null!;
     }
 }
