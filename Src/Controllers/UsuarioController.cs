@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using apiWebDos.Src.Data;
 using apiWebDos.Src.Dtos;
+using apiWebDos.Src.Interfaces;
 using apiWebDos.Src.Mappers;
 using apiWebDos.Src.Models;
+using apiWebDos.Src.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
@@ -16,23 +18,24 @@ namespace apiWebDos.Src.Controllers
     [ApiController] 
     public class UsuarioController : ControllerBase
     {
-        private readonly ApplicationDBContext _context;
-        public UsuarioController(ApplicationDBContext context)
+        private readonly IUsuarioRepository _usuarioRepository;
+        public UsuarioController(IUsuarioRepository usuarioRepository)
         {
-            _context = context;
+            _usuarioRepository = usuarioRepository;
         }
 
         [HttpGet]
-        public IActionResult GetUsuarios()
+        public async Task<IActionResult> GetUsuarios()
         {
-            var usuarios = _context.Usuarios.ToList().Select(u => u.ToGetUsuarioDto());
-            return Ok(usuarios);
+            var usuarios = await _usuarioRepository.ObtenerTodosLosUsuarios();
+            var usuarioDto = usuarios.Select(u => u.ToGetUsuarioDto());
+            return Ok(usuarioDto);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetByIdUsuario([FromRoute] int id)
+        public async Task<IActionResult> GetByIdUsuario([FromRoute] int id)
         {
-            var usuario = _context.Usuarios.FirstOrDefault(x => x.IdUsuario == id);
+            var usuario = await _usuarioRepository.ObtenerPorIdUsuario(id);
             if (usuario == null)
             {
                 return NotFound();
@@ -41,15 +44,14 @@ namespace apiWebDos.Src.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostUsuario([FromBody] UsuarioPostDto usuarioDto)
+        public async Task<IActionResult> PostUsuario([FromBody] UsuarioPostDto usuarioDto)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var usuarioModel = usuarioDto.ToPostUsuarioDto();
-            _context.Usuarios.Add(usuarioModel);
-            _context.SaveChanges();
+            await _usuarioRepository.AgregarUsuario(usuarioModel);
             return CreatedAtAction(nameof(GetByIdUsuario), new {id = usuarioModel.IdUsuario}, usuarioModel.ToGetUsuarioDto());
         }
     }

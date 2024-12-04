@@ -1,4 +1,6 @@
 using apiWebDos.Src.Data;
+using apiWebDos.Src.Interfaces;
+using apiWebDos.Src.Repositories;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +12,7 @@ Env.Load();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 string connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? "Data Source=app.db";
 builder.Services.AddDbContext<ApplicationDBContext>(opt => opt.UseSqlite(connectionString));
