@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("apiWebDos")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d4407e6cac9f0f7deb5151361d4a87f678ddaa9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f0cbbef78dbb069f6ad392056d998427907802e7")]
 [assembly: System.Reflection.AssemblyProductAttribute("apiWebDos")]
 [assembly: System.Reflection.AssemblyTitleAttribute("apiWebDos")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
