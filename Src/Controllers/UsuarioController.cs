@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using apiWebDos.Src.Data;
+using apiWebDos.Src.Dtos;
+using apiWebDos.Src.Mappers;
 using apiWebDos.Src.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +25,7 @@ namespace apiWebDos.Src.Controllers
         [HttpGet]
         public IActionResult GetUsuarios()
         {
-            var usuarios = _context.Usuarios.ToList();
+            var usuarios = _context.Usuarios.ToList().Select(u => u.ToGetUsuarioDto());
             return Ok(usuarios);
         }
 
@@ -35,15 +37,20 @@ namespace apiWebDos.Src.Controllers
             {
                 return NotFound();
             }
-            return Ok(usuario);
+            return Ok(usuario.ToGetUsuarioDto());
         }
 
         [HttpPost]
-        public IActionResult PostUsuario([FromBody] Usuario usuario)
+        public IActionResult PostUsuario([FromBody] UsuarioPostDto usuarioDto)
         {
-            _context.Usuarios.Add(usuario);
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var usuarioModel = usuarioDto.ToPostUsuarioDto();
+            _context.Usuarios.Add(usuarioModel);
             _context.SaveChanges();
-            return Ok(usuario);
+            return CreatedAtAction(nameof(GetByIdUsuario), new {id = usuarioModel.IdUsuario}, usuarioModel.ToGetUsuarioDto());
         }
     }
 }
