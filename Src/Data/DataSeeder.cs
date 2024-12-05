@@ -36,7 +36,7 @@ namespace apiWebDos.Src.Data
             }
         }
 
-        private static string GenerarFechaNacimientoAleatoria()
+        private static DateOnly GenerarFechaNacimientoAleatoria()
         {
             var random = new Random();
             int startYear = DateTime.Now.Year - 100; // Fecha mínima hace 100 años
@@ -44,8 +44,8 @@ namespace apiWebDos.Src.Data
             int year = random.Next(startYear, endYear);
             int month = random.Next(1, 13);
             int day = random.Next(1, DateTime.DaysInMonth(year, month) + 1);
-            var fechaNacimiento = new DateTime(year, month, day);
-            return fechaNacimiento.ToString("yyyy-MM-dd");
+            
+            return new DateOnly(year, month, day);
         }
         private static string GenerateUniqueRandomRut(HashSet<string> existingRuts)
         {

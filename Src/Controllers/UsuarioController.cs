@@ -50,6 +50,13 @@ namespace apiWebDos.Src.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            var nowDate = DateTime.Now;
+
+            if(usuarioDto.FechaNacimiento >= DateOnly.FromDateTime(nowDate))
+            {
+                return BadRequest("Fecha de nacimiento NO debe ser la actual.");
+            }
             var usuarioModel = usuarioDto.ToPostUsuarioDto();
             await _usuarioRepository.AgregarUsuario(usuarioModel);
             return CreatedAtAction(nameof(GetByIdUsuario), new {id = usuarioModel.IdUsuario}, usuarioModel.ToGetUsuarioDto());
